@@ -58,7 +58,8 @@ const DashboardPage = () => {
     const [categoryCount, setCategoryCount] = useState(0); // Total categories count
     const [store, setStore] = useState("All"); // Default store set to "All"
     const [topSold, setTopSold] = useState([]);
-
+    const storeID: string = localStorage.getItem("store_id") || "";
+    console.log(storeID);
     const months = [
         "January",
         "February",
@@ -81,6 +82,12 @@ const DashboardPage = () => {
             if (!isVerified) {
                 navigate("/admin/login"); // Redirect if token is invalid or doesn't exist
             } else {
+                const role = localStorage.getItem("role"); // Check the user's role from localStorage
+                if (role === "manager") {
+                    setStore(storeID); // Set store from localStorage if not a manager
+                } else {
+                    setStore("All"); // Set store to "All" if not a manager
+                }
                 // Fetch store locations and orders if the token is verified
                 fetchStores();
                 fetchOrders();
@@ -107,38 +114,6 @@ const DashboardPage = () => {
         }
     };
 
-    // const calculatePercentageChanges = (amounts: any) => {
-    //     let percentages = [];
-
-    //     // Handle the first element separately as there is no previous value
-    //     percentages.push("0%"); // Starting point, as there is no previous value to compare
-
-    //     for (let i = 1; i < amounts.length; i++) {
-    //         const currentValue = amounts[i];
-    //         const previousValue = amounts[i - 1];
-
-    //         // If the previous value is 0 and the current value is non-zero
-    //         if (previousValue === 0) {
-    //             if (currentValue === 0) {
-    //                 percentages.push("0%"); // No change from 0 to 0
-    //             } else {
-    //                 percentages.push("100%"); // First increase from 0 to non-zero is 100%
-    //             }
-    //         } else if (currentValue === 0) {
-    //             // If current value is 0, calculate the percentage decrease
-    //             const change =
-    //                 ((currentValue - previousValue) / previousValue) * 100;
-    //             percentages.push(`${change.toFixed(2)}%`);
-    //         } else {
-    //             // Calculate the percentage change normally
-    //             const change =
-    //                 ((currentValue - previousValue) / previousValue) * 100;
-    //             percentages.push(`${change.toFixed(2)}%`);
-    //         }
-    //     }
-
-    //     return percentages;
-    // };
     const fetchOrders = async () => {
         const data = await getSpecificOrders(year, store);
         const categories_count = await getCategories();
@@ -246,9 +221,9 @@ const DashboardPage = () => {
                 salesByStore[storeId] = { dineIn: 0, takeOut: 0 };
             }
 
-            if (order.order_type === "Dine In") {
+            if (order.order_type === "dineIn") {
                 salesByStore[storeId].dineIn += amount;
-            } else if (order.order_type === "Take Out") {
+            } else if (order.order_type === "takeOut") {
                 salesByStore[storeId].takeOut += amount;
             }
         });
@@ -270,7 +245,7 @@ const DashboardPage = () => {
     };
 
     const pieChart = {
-        labels: ["Dine In", "Take Out"],
+        labels: ["Dine-In", "Take-Out"],
         datasets: [
             {
                 label: "Sales by Store",
@@ -331,27 +306,31 @@ const DashboardPage = () => {
                     </div>
 
                     {/* Store Selector */}
-                    <div className="store-selector">
-                        <label htmlFor="store" className="mr-2">
-                            Store
-                        </label>
-                        <select
-                            id="store"
-                            value={store}
-                            onChange={(e) => setStore(e.target.value)}
-                            className="select select-bordered"
-                        >
-                            <option value="All">All</option>
-                            {stores.map((store: any) => (
-                                <option
-                                    key={store.store_id}
-                                    value={store.store_id}
-                                >
-                                    {store.store_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    {!localStorage.getItem("store_id") ? (
+                        <div className="store-selector">
+                            <label htmlFor="store" className="mr-2">
+                                Store
+                            </label>
+                            <select
+                                id="store"
+                                value={store}
+                                onChange={(e) => setStore(e.target.value)}
+                                className="select select-bordered"
+                            >
+                                <option value="All">All</option>
+                                {stores.map((store: any) => (
+                                    <option
+                                        key={store.store_id}
+                                        value={store.store_id}
+                                    >
+                                        {store.store_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    ) : (
+                        ""
+                    )}
                 </div>
                 <div className="stats shadow mb-4 w-full">
                     {/* Stat 1: Total Sales */}

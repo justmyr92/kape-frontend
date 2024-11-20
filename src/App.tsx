@@ -10,6 +10,8 @@ import PromoPage from "./pages/admin/PromoPage";
 import MenuPage from "./pages/customer/MenuPage";
 import PromotionPage from "./pages/customer/PromotionPage";
 import Storesapge from "./pages/customer/Storesapge";
+import SamplePage from "./pages/customer/SamplePage";
+import CategoriesPage from "./pages/admin/CategoryPage";
 
 function App() {
     return (
@@ -31,6 +33,8 @@ function App() {
                 <Route element={<PromoPage />} path="/promos" />
                 <Route element={<PromotionPage />} path="/promotions" />
                 <Route element={<Storesapge />} path="/store-locations" />
+                <Route element={<SamplePage />} path="/sample-page" />
+                <Route element={<CategoriesPage />} path="/categories" />
             </Routes>
         </BrowserRouter>
     );

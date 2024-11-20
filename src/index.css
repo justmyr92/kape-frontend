@@ -64,6 +64,15 @@ h2.title {
 }
 
 .button__container .cta__btn,
-.title-reg {
+.title-reg,
+p.title {
     font-family: "Sagona Regular";
+}
+
+.section__top_orders button span {
+    background-color: #5c2a00 !important;
+}
+
+.section__top_orders .absolute.space-x-3 button {
+    background-color: #5c2a00 !important;
 }

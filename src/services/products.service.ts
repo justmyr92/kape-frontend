@@ -27,6 +27,31 @@ export const getProductsWithCategories = async () => {
     }
 };
 
+export const getProductsWithCategoriesByType = async (type: string) => {
+    try {
+        const response = await fetch(
+            `${SERVER_URI}/get/products-by-type/${type}`,
+            {
+                method: "GET", // Specify the HTTP method
+                headers: {
+                    "Content-Type": "application/json", // Specify the content type
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const products = await response.json(); // Parse the JSON response
+        console.log("asdas", products);
+        return products; // Return the list of managers
+    } catch (error) {
+        console.error("Error fetching managers:", error);
+        throw error; // Propagate the error for further handling if needed
+    }
+};
+
 export const getCategories = async () => {
     const token = getToken();
     try {
@@ -91,24 +116,27 @@ export const addCategory = async (category_name: string) => {
     }
 };
 
-export const updateProduct = async (product: any) => {
+export const updateProduct = async (product_id: number, product: any) => {
     const token = getToken();
+
+    const formData = new FormData();
+    formData.append("product_name", product.product_name);
+    formData.append("product_price", product.product_price.toString());
+    formData.append("category_id", product.category_id.toString());
+
+    if (product.product_image) {
+        formData.append("product_image", product.product_image); // Only append if a new image is selected
+    }
+
     try {
-        // Assuming product.product_id exists
         const response = await fetch(
-            `${SERVER_URI}/update/product/${product.product_id}`,
+            `${SERVER_URI}/update/product/${product_id}`,
             {
-                method: "PUT", // Use PUT for updating the product
+                method: "PUT",
                 headers: {
-                    "Content-Type": "application/json",
                     ...(token ? { jwt_token: token } : {}), // Include token if available
                 },
-                body: JSON.stringify({
-                    product_name: product.product_name,
-                    product_price: product.product_price,
-                    category_id: product.category_id,
-                    product_image: product.product_image,
-                }), // Send the updated product data
+                body: formData,
             }
         );
 
@@ -116,10 +144,62 @@ export const updateProduct = async (product: any) => {
             throw new Error("Network response was not ok");
         }
 
-        const updatedProduct = await response.json(); // Parse the response
-        return updatedProduct; // Return the updated product data
+        const updatedProduct = await response.json();
+        return updatedProduct;
     } catch (error) {
         console.error("Error updating product:", error);
-        throw error; // Propagate the error for further handling if needed
+        throw error;
     }
+};
+
+export const updateCategory = async (
+    categoryId: number,
+    categoryName: string
+) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${SERVER_URI}/update/category/${categoryId}`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                ...(token ? { jwt_token: token } : {}),
+            },
+            body: JSON.stringify({ category_name: categoryName }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Error updating category");
+    }
+
+    const updatedCategory = await response.json();
+    return updatedCategory;
+};
+
+// products.service.ts
+
+export const updateCategoryStatus = async (
+    categoryId: number,
+    status: string
+) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+        `${SERVER_URI}/update/delete/category/${categoryId}`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                ...(token ? { jwt_token: token } : {}),
+            },
+            body: JSON.stringify({ status }), // Sending the updated status
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to update category status");
+    }
+
+    return await response.json();
 };

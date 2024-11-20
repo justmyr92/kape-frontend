@@ -91,35 +91,38 @@ const PromoPage = () => {
             header: "Active",
             cell: (info) => (
                 <div
-                    className={`p-2 text-white rounded text-center ${
+                    className={`p-2 text-white rounded text-center text-sm ${
                         info.getValue() ? "bg-green-500" : "bg-red-500"
                     }`}
                 >
-                    {info.getValue() ? "Yes" : "No"}
+                    {info.getValue() ? "active" : "no"}
                 </div>
             ),
         }),
-        columnHelper.display({
-            id: "actions",
-            header: "Actions",
-            cell: ({ row }) => (
-                <div className="flex space-x-2">
-                    <button
-                        onClick={() => handleUpdatePromo(row.original)}
-                        className="btn btn-sm btn-primary"
-                    >
-                        Edit
-                    </button>
-                    <button
-                        onClick={() => handleDeletePromo(row.original.promo_id)}
-                        className="btn btn-sm btn-danger"
-                    >
-                        Delete
-                    </button>
-                </div>
-            ),
-        }),
-    ];
+        localRole !== "owner" &&
+            columnHelper.display({
+                id: "actions",
+                header: "Actions",
+                cell: ({ row }) => (
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={() => handleUpdatePromo(row.original)}
+                            className="btn btn-sm btn-primary"
+                        >
+                            Edit
+                        </button>
+                        <button
+                            onClick={() =>
+                                handleDeletePromo(row.original.promo_id)
+                            }
+                            className="btn btn-sm btn-danger"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                ),
+            }),
+    ].filter(Boolean);
 
     const handleAddPromo = () => setShowAddPromoModal(true);
 

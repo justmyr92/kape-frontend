@@ -12,9 +12,9 @@ import {
     faChevronLeft,
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import Footer from "../../components/Footer";
 
 const Storespage = () => {
-    const [selectedStore, setSelectedStore] = useState<any>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const storeData = [
@@ -77,13 +77,13 @@ const Storespage = () => {
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={handlePrev}
-                                    className="p-2 bg-gray-300 rounded-full w-16 hover:bg-gray-700 hover:text-white transition"
+                                    className="p-2 bg-amber-950 rounded-full w-16 hover:bg-amber-700 text-white transition"
                                 >
                                     <FontAwesomeIcon icon={faChevronLeft} />
                                 </button>
                                 <button
                                     onClick={handleNext}
-                                    className="p-2 bg-gray-300 rounded-full w-16 hover:bg-gray-700 hover:text-white transition"
+                                    className="p-2 bg-amber-950 rounded-full w-16 hover:bg-amber-700 text-white transition"
                                 >
                                     <FontAwesomeIcon icon={faChevronRight} />
                                 </button>
@@ -100,6 +100,7 @@ const Storespage = () => {
                     </div>
                 </div>
             </section>
+            <Footer />
         </main>
     );
 };

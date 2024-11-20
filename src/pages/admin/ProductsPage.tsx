@@ -30,7 +30,7 @@ const ProductsPage = () => {
                     alt="Product"
                     src={info
                         .getValue()
-                        .replace(/^..\\frontend\\src\\/, ".\\src\\")}
+                        .replace(/^..\/kape-main\/src\//, "src/")}
                     className="w-[10rem]"
                 />
             ),
@@ -41,7 +41,7 @@ const ProductsPage = () => {
             header: () => <span>Product Name</span>,
         }),
         columnHelper.accessor("product_price", {
-            cell: (info) => <p>${info.getValue()}</p>,
+            cell: (info) => <p>Php {info.getValue()}</p>,
             header: () => <span>Price</span>,
         }),
         columnHelper.accessor("category_name", {
@@ -86,7 +86,11 @@ const ProductsPage = () => {
         const fetchCategories = async () => {
             try {
                 const categoriesData = await getCategories();
-                setCategories(categoriesData);
+
+                const activeCategories = categoriesData.filter(
+                    (category: any) => category.status === "active"
+                );
+                setCategories(activeCategories);
                 setReload(false);
             } catch (error) {
                 console.error(error);
@@ -108,6 +112,7 @@ const ProductsPage = () => {
     return (
         <section className="products h-screen flex">
             <Sidebar />
+
             <main className="main__container h-full w-4/5 p-5 overflow-auto">
                 <div className="main__header flex justify-between items-center">
                     <h1 className="main__title text-3xl uppercase">Products</h1>

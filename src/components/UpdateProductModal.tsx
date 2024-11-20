@@ -19,31 +19,52 @@ const UpdateProductModal = ({
     const [productName, setProductName] = useState("");
     const [productPrice, setProductPrice] = useState(0);
     const [categoryId, setCategoryId] = useState<number | string>("");
+    const [productImage, setProductImage] = useState<File | null>(null); // File for the new image
+    const [imagePreview, setImagePreview] = useState<string | null>(null); // For displaying the preview
 
     useEffect(() => {
         if (selectedProduct) {
             setProductName(selectedProduct.product_name);
             setProductPrice(selectedProduct.product_price);
             setCategoryId(selectedProduct.category_id);
+            setImagePreview(selectedProduct.product_image); // Set the current image as the initial preview
         }
     }, [selectedProduct]);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        setProductImage(file);
+
+        // Generate a preview of the new image
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            setImagePreview(objectUrl);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Prepare product data
+        if (!selectedProduct?.product_id) {
+            console.error("Product ID is missing");
+            return;
+        }
+
         const updatedProduct = {
-            product_id: selectedProduct.product_id,
             product_name: productName,
             product_price: productPrice,
             category_id: categoryId,
+            product_image: productImage, // Ensure this is handled correctly
         };
 
         try {
-            const result = await updateProduct(updatedProduct); // Call the updateProduct service
+            const result = await updateProduct(
+                selectedProduct.product_id,
+                updatedProduct
+            );
             console.log("Product updated successfully:", result);
-            setReload(true); // Trigger reload of products
-            setShowUpdateModal(false); // Close the modal
+            setReload(true);
+            setShowUpdateModal(false);
         } catch (error) {
             console.error("Error updating product:", error);
         }
@@ -100,6 +121,26 @@ const UpdateProductModal = ({
                                     </option>
                                 ))}
                             </select>
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium">
+                                Product Image
+                            </label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="input input-bordered w-full mt-1"
+                            />
+                            {imagePreview && (
+                                <div className="mt-2">
+                                    <img
+                                        src={imagePreview}
+                                        alt="Product Preview"
+                                        className="w-full h-48 object-cover rounded-md"
+                                    />
+                                </div>
+                            )}
                         </div>
                         <div className="modal-action flex justify-end gap-3">
                             <button
