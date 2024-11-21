@@ -149,14 +149,7 @@ const MenuPage = () => {
                             >
                                 <figure className="rounded-t-md px-3 py-2 h-60 w-60 flex justify-center items-center">
                                     <img
-                                        src={
-                                            product.product_image
-                                                ? product.product_image.replace(
-                                                      /^..\/kape-main\/src\//,
-                                                      "src/"
-                                                  )
-                                                : "assets/products/default-image.jpg" // Replace with your actual default image path
-                                        }
+                                        src={product.product_image}
                                         alt={product.product_name}
                                         className="h-[90%] w-[90%] object-center object-contain rounded-full border-2 border-amber-950"
                                     />
@@ -191,12 +184,7 @@ const MenuPage = () => {
                                 <figure className="rounded-t-md px-3 py-2 h-60 w-60 flex justify-center items-center">
                                     <img
                                         src={
-                                            product.product_image
-                                                ? product.product_image.replace(
-                                                      /^..\/kape-main\/src\//,
-                                                      "src/"
-                                                  )
-                                                : "assets/products/default-image.jpg" // Replace with your actual default image path
+                                            product.product_image // Replace with your actual default image path
                                         }
                                         alt={product.product_name}
                                         className="h-[90%] w-[90%] object-center object-contain rounded-full border-2 border-amber-950"

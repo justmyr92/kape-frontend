@@ -29,8 +29,7 @@ const ProductsPage = () => {
                 <img
                     alt="Product"
                     src={info
-                        .getValue()
-                        .replace(/^..\/kape-main\/src\//, "src/")}
+                        .getValue()}
                     className="w-[10rem]"
                 />
             ),

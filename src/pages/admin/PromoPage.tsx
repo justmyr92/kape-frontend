@@ -59,10 +59,7 @@ const PromoPage = () => {
                 if (imageUrl) {
                     return (
                         <img
-                            src={imageUrl.replace(
-                                /^..\\kape-main\\src\\/,
-                                ".\\src\\"
-                            )}
+                            src={imageUrl}
                             alt="Promo Banner"
                             className="w-[20rem] object-cover"
                         />

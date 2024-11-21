@@ -133,10 +133,7 @@ const MenuPage = () => {
                                 >
                                     <div className="img-container p-3 h-full">
                                         <img
-                                            src={meal.product_image.replace(
-                                                /^..\\kape-main\\src\\/,
-                                                ".\\src\\"
-                                            )}
+                                            src={meal.product_image}
                                             className="h-[10rem] object-cover"
                                             alt={meal.product_name}
                                         />
@@ -168,10 +165,7 @@ const MenuPage = () => {
                                 >
                                     <div className="img-container p-5 h-full">
                                         <img
-                                            src={drink.product_image.replace(
-                                                /^..\\kape-main\\src\\/,
-                                                ".\\src\\"
-                                            )}
+                                            src={drink.product_image}
                                             className="h-[10rem] object-cover"
                                             alt={drink.product_name}
                                         />

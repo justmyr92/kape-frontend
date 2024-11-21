@@ -37,15 +37,9 @@ const PromotionPage = () => {
                     <Carousel className="h-[50%]">
                         {promotions.map((promo: any, index: number) => (
                             <img
-                                src={promo.promo_image.replace(
-                                    /^..\\kape-main\\src\\/,
-                                    ".\\src\\"
-                                )}
+                                src={promo.promo_image}
                                 key={index}
-                                alt={promo.promo_image.replace(
-                                    /^..\\kape-main\\src\\/,
-                                    ".\\src\\"
-                                )}
+                                alt={promo.promo_image}
                                 className="mt-5 w-[90vw] h-96 object-contain rounded-lg" // Limit image height
                             />
                         ))}
